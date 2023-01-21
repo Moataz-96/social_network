@@ -22,8 +22,6 @@
 - Celery
 - AbstractAPI 
 
-### Deployment
-- Heroku 
 
 ### Contents
 The main structure of the project is as follows:
@@ -109,15 +107,24 @@ The main structure of the project is as follows:
   ~$ python3 -m venv .venv
   ~$ source .venv/bin/activate
 ```
+- ###### Create secret key  
+```
+  (.venv):~$ python -c "import secrets; print(secrets.token_urlsafe())"
+      eyK3bT*********
+```
+
+- ###### Create .env  
+```
+  (.venv):~$ touch .env
+    DEBUG=True
+    SECRET_KEY=eyK3bT*********
+    DATABASE_URL=sqlite:///db.sqlite3
+```
+
+
 - ###### Install requirements.txt
 ```
   (.venv):~$ python3 -m pip install -r requirements.txt
-```
-
-- ###### Postgres Database
-```
-    Add your postgres credentials in 
-    config/configuration_manager/conf_files/local.env
 ```
 
     
