@@ -21,7 +21,9 @@
 - Swagger
 - Celery
 - AbstractAPI 
-- 
+
+### Deployment
+- Heroku 
 
 ### Contents
 The main structure of the project is as follows:

@@ -11,8 +11,19 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import urllib.request
 from datetime import timedelta
+import urllib.request
+from environs import Env
+
+""" 
+# Snippet -> to read db credentials from secret manager, but here i'll use heroku db for deployment
+from config.common.configuration_manager.configuration_manager_secret_manager import \
+        ConfigurationManagerSecretManager
+conf_manager = ConfigurationManagerSecretManager()
+"""
+
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,26 +32,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*0egi986ff%oir=r^%7*7i!=^r3xi9$dl-@lx0=l(@o4e)igkl'
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-DEPLOY = 'local'  # or 'prod'
+DEBUG = env.bool("DEBUG")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
 
-if DEPLOY == 'local':
-    from config.common.configuration_manager.configuration_manager_env_file import \
-        ConfigurationManagerEnvFile
-    conf_manager = ConfigurationManagerEnvFile()
+if DEBUG:
     domain = 'http://127.0.0.1:8000'
 else:
-    from config.common.configuration_manager.configuration_manager_secret_manager import \
-        ConfigurationManagerSecretManager
-    conf_manager = ConfigurationManagerSecretManager()
     ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
     domain = f"http://{ip}"
-    ALLOWED_HOSTS.append(ip)
 
 # Application definition
 
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     # 3rd party apps
@@ -68,6 +72,7 @@ INSTALLED_APPS = [
     # local
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
+    'emails.apps.EmailsConfig',
 ]
 
 SWAGGER_SETTINGS = {
@@ -120,14 +125,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': conf_manager.database_name,
-            'USER': conf_manager.database_username,
-            'PASSWORD': conf_manager.database_password,
-            'HOST': conf_manager.database_host,
-            'PORT': conf_manager.database_port,
-        }
+    "default": env.dj_db_url("DATABASE_URL")
 }
 
 REST_FRAMEWORK = {

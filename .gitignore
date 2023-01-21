@@ -50,3 +50,9 @@ Thumbs.db
 
 migrations/
 *.pyc
+
+.venv
+.env
+__pycache__/
+db.sqlite3
+.DS_Store # Mac only
