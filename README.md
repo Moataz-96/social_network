@@ -1,6 +1,7 @@
 # Project: Social Network
 
 ## Service: Social Network Backend API
+## IP: http://3.83.30.152:8000/
 
 ### Description:
 - This code aims to build a simple REST API-based social network in Django where users can sign up, create text posts, and view, like, and dislike the posts of other users.
