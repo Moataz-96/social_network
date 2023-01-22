@@ -72,6 +72,9 @@ The main structure of the project is as follows:
 │ └── views.py
 ├── README.md
 ├── requirements.txt
+├── simple-requirements.txt
+├── runtime.txt
+├── Procfile
 ├── services
 │ └── utils.py
 ├── static
@@ -124,7 +127,7 @@ The main structure of the project is as follows:
 
 - ###### Install requirements.txt
 ```
-  (.venv):~$ python3 -m pip install -r requirements.txt
+  (.venv):~$ python3 -m pip install -r simple-requirements.txt
 ```
 
     
